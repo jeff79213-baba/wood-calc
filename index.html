@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>木工現場快速叫料計算器</title>
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --primary: #ff6b00;
+            --primary-hover: #e05e00;
+            --text-main: #2d3748;
+            --text-muted: #718096;
+            --result-bg: #fff9e6;
+            --result-border: #ffe0b3;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .section-title {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            background: #fff;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .btn.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .input-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .input-field {
+            flex: 1;
+        }
+
+        .input-field input {
+            width: 100%;
+            padding: 14px;
+            font-size: 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            outline: none;
+            font-weight: bold;
+            color: var(--text-main);
+            background: #f8fafc;
+        }
+
+        .input-field input:focus {
+            border-color: var(--primary);
+            background: #fff;
+        }
+
+        .select-field {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            outline: none;
+            font-weight: bold;
+            color: var(--text-main);
+            background: #f8fafc;
+            margin-bottom: 20px;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23718096' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+        }
+
+        .result-card {
+            background: var(--result-bg);
+            border: 2px solid var(--result-border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 5px;
+        }
+
+        .result-line {
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: var(--text-main);
+        }
+
+        .result-line span:last-child {
+            font-weight: bold;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--result-border);
+            margin: 12px 0;
+        }
+
+        .final-qty {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .final-qty .title {
+            font-size: 15px;
+            color: #c05621;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .final-qty .number {
+            font-size: 42px;
+            color: #d69e2e;
+            font-weight: 900;
+            display: block;
+            text-shadow: 1px 1px 0px #fff;
+        }
+
+        .final-qty .unit {
+            font-size: 18px;
+            color: var(--text-main);
+            font-weight: bold;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #3182ce;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: none;
+            z-index: 999;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toast" class="toast">請輸入正確的尺寸喔！</div>
+
+    <div class="container">
+        <h1>🪵 木工現場快速叫料計算器</h1>
+
+        <div class="section-title">第一步：選擇施工位置</div>
+        <div class="btn-group">
+            <button class="btn active" id="type-floor" onclick="switchType('floor')">地板 🪵</button>
+            <button class="btn" id="type-wall" onclick="switchType('wall')">牆面 🧱</button>
+        </div>
+
+        <div class="section-title">第二步：選擇輸入單位</div>
+        <div class="btn-group">
+            <button class="btn active" id="unit-cm" onclick="switchUnit('cm')">公分 (cm)</button>
+            <button class="btn" id="unit-ft" onclick="switchUnit('ft')">台尺</button>
+        </div>
+
+        <div class="section-title" id="dim-title">第三步：輸入現場尺寸</div>
+        <div class="input-row">
+            <div class="input-field">
+                <input type="number" id="input-length" placeholder="長度" oninput="calculate()" min="0">
+            </div>
+            <div class="input-field">
+                <input type="number" id="input-width" placeholder="寬度/高度" oninput="calculate()" min="0">
+            </div>
+        </div>
+
+        <div class="section-title">第四步：選擇建材規格</div>
+        <select id="material-spec" class="select-field" onchange="calculate()">
+            </select>
+
+        <div class="section-title">第五步：抓追加耗損率</div>
+        <div class="btn-group">
+            <button class="btn active" id="loss-10" onclick="switchLoss(0.10)">10% (方正)</button>
+            <button class="btn" id="loss-15" onclick="switchLoss(0.15)">15% (多梁柱)</button>
+        </div>
+
+        <div class="result-card">
+            <div class="result-line">
+                <span>測量淨面積：</span>
+                <span id="res-net">0.00 坪</span>
+            </div>
+            <div class="result-line">
+                <span>含耗損總面積：</span>
+                <span id="res-total">0.00 坪</span>
+            </div>
+            <div class="divider"></div>
+            <div class="final-qty">
+                <span class="title">📢 建議向建材行叫料數量</span>
+                <span class="number" id="res-qty">0</span>
+                <span class="unit" id="res-unit">片</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentType = 'floor';
+        let currentUnit = 'cm';
+        let currentLoss = 0.10;
+
+        const specs = {
+            floor: [
+                { text: '木地板箱裝 (每箱抓 0.5 坪)', val: 0.5, unit: '箱' },
+                { text: '木地板箱裝 (每箱抓 0.6 坪)', val: 0.6, unit: '箱' },
+                { text: '4x8 尺 木地板材 (每片 0.88 坪)', val: 0.88, unit: '片' }
+            ],
+            wall: [
+                { text: '4x8 尺 板材 (夾板/矽酸鈣板 - 0.88 坪)', val: 0.88, unit: '片' },
+                { text: '3x6 尺 板材 (每片 0.5 坪)', val: 0.5, unit: '片' }
+            ]
+        };
+
+        function initSpecDropdown() {
+            const dropdown = document.getElementById('material-spec');
+            dropdown.innerHTML = '';
+            specs[currentType].forEach(item => {
+                const opt = document.createElement('option');
+                opt.value = item.val;
+                opt.dataset.unit = item.unit;
+                opt.textContent = item.text;
+                dropdown.appendChild(opt);
+            });
+        }
+
+        function switchType(type) {
+            currentType = type;
+            document.getElementById('type-floor').classList.toggle('active', type === 'floor');
+            document.getElementById('type-wall').classList.toggle('active', type === 'wall');
+            document.getElementById('input-width').placeholder = type === 'floor' ? '寬度' : '高度';
+            initSpecDropdown();
+            calculate();
+        }
+
+        function switchUnit(unit) {
+            currentUnit = unit;
+            document.getElementById('unit-cm').classList.toggle('active', unit === 'cm');
+            document.getElementById('unit-ft').classList.toggle('active', unit === 'ft');
+            document.getElementById('input-length').value = '';
+            document.getElementById('input-width').value = '';
+            document.getElementById('input-length').placeholder = unit === 'cm' ? '長度 (公分)' : '長度 (台尺)';
+            document.getElementById('input-width').placeholder = currentType === 'floor' 
+                ? (unit === 'cm' ? '寬度 (公分)' : '寬度 (台尺)')
+                : (unit === 'cm' ? '高度 (公分)' : '高度 (台尺)');
+            calculate();
+        }
+
+        function switchLoss(rate) {
+            currentLoss = rate;
+            document.getElementById('loss-10').classList.toggle('active', rate === 0.10);
+            document.getElementById('loss-15').classList.toggle('active', rate === 0.15);
+            calculate();
+        }
+
+        function calculate() {
+            const len = parseFloat(document.getElementById('input-length').value);
+            const wid = parseFloat(document.getElementById('input-width').value);
+            const dropdown = document.getElementById('material-spec');
+            if (!dropdown.value) return;
+            const specCoverage = parseFloat(dropdown.value);
+            const itemUnit = dropdown.options[dropdown.selectedIndex].dataset.unit;
+
+            if (len < 0 || wid < 0) {
+                showToast();
+                return;
+            }
+
+            if (!len || !wid) {
+                document.getElementById('res-net').textContent = '0.00 坪';
+                document.getElementById('res-total').textContent = '0.00 坪';
+                document.getElementById('res-qty').textContent = '0';
+                document.getElementById('res-unit').textContent = itemUnit;
+                return;
+            }
+
+            let netPing = 0;
+            if (currentUnit === 'cm') {
+                netPing = (len * wid) / 32400;
+            } else if (currentUnit === 'ft') {
+                netPing = (len * wid) / 36;
+            }
+
+            const totalPing = netPing * (1 + currentLoss);
+            const finalQty = Math.ceil(totalPing / specCoverage);
+
+            document.getElementById('res-net').textContent = netPing.toFixed(2) + ' 坪';
+            document.getElementById('res-total').textContent = totalPing.toFixed(2) + ' 坪';
+            document.getElementById('res-qty').textContent = finalQty;
+            document.getElementById('res-unit').textContent = itemUnit;
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 2000);
+            document.getElementById('input-length').value = '';
+            document.getElementById('input-width').value = '';
+        }
+
+        window.onload = function() {
+            initSpecDropdown();
+        };
+    </script>
+</body>
+</html>
