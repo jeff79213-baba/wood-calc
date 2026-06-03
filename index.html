@@ -3,58 +3,64 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<meta name="theme-color" content="#ff6b00">
+<meta name="theme-color" content="#111111">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.json">
-<title>裝潢計算器</title>
+<title>中區建材行 — 裝潢計算器</title>
 <style>
 :root {
-  --bg: #f4f6f9; --card: #fff; --primary: #ff6b00; --primary-hover: #e05e00;
-  --text: #2d3748; --muted: #718096; --border: #e2e8f0;
+  --bg: #f0f0f0; --card: #fff; --primary: #1a1a1a; --primary-hover: #333;
+  --text: #1a1a1a; --muted: #666; --border: #ddd;
   --tab-height: 52px;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background: var(--bg); color: var(--text); }
+body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans TC",sans-serif; background: var(--bg); color: var(--text); }
 .app { max-width: 520px; margin: 0 auto; padding: 0 0 30px; }
-.header { background: var(--primary); color: #fff; padding: 14px 16px; text-align: center; position: sticky; top: 0; z-index: 10; }
-.header h1 { font-size: 18px; font-weight: 800; }
-.header .sub { font-size: 11px; opacity: .8; margin-top: 2px; }
-.tabs { display: flex; background: var(--card); border-bottom: 2px solid var(--border); position: sticky; top: 52px; z-index: 9; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+.header { background: #111; color: #fff; padding: 14px 16px; text-align: center; position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: center; gap: 12px; }
+.header-logo { height: 40px; width: 40px; border-radius: 8px; object-fit: contain; background: #fff; padding: 3px; flex-shrink: 0; }
+.header-text { text-align: center; }
+.header-text h1 { font-size: 18px; font-weight: 800; letter-spacing: 1px; }
+.header-text .sub { font-size: 11px; opacity: .7; margin-top: 2px; }
+
+.tabs { display: flex; background: var(--card); border-bottom: 2px solid var(--border); position: sticky; top: 68px; z-index: 9; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .tabs::-webkit-scrollbar { display: none; }
 .tab { flex: 1; min-width: 60px; padding: 10px 6px; text-align: center; font-size: 12px; font-weight: 700; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; transition: all .2s; white-space: nowrap; }
 .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
 .tab .tab-icon { display: block; font-size: 18px; margin-bottom: 2px; }
 .panel { display: none; padding: 16px; }
 .panel.active { display: block; }
-.card { background: var(--card); border-radius: 12px; padding: 16px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+.card { background: var(--card); border-radius: 12px; padding: 16px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
 .card-title { font-size: 13px; font-weight: 700; color: var(--muted); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
 .row { display: flex; gap: 10px; margin-bottom: 12px; }
 .col { flex: 1; }
 .col label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 3px; font-weight: 600; }
-.col input,.col select { width: 100%; padding: 10px 12px; font-size: 15px; border: 2px solid var(--border); border-radius: 8px; outline: none; background: #f8fafc; color: var(--text); font-weight: 600; }
+.col input,.col select { width: 100%; padding: 10px 12px; font-size: 15px; border: 2px solid var(--border); border-radius: 8px; outline: none; background: #f8f8f8; color: var(--text); font-weight: 600; transition: border-color .2s; }
 .col input:focus,.col select:focus { border-color: var(--primary); background: #fff; }
-.col select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23718096' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; background-size: 14px; }
+.col select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; background-size: 14px; }
 .btn-group { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
 .btn { flex: 1; padding: 10px; border: 2px solid var(--border); background: #fff; border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--text); cursor: pointer; transition: all .15s; text-align: center; min-width: 60px; }
+.btn:hover { background: #f5f5f5; }
 .btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 .btn-sm { padding: 6px 10px; font-size: 12px; flex: 0 1 auto; }
-.result { background: #fff9e6; border: 2px solid #ffe0b3; border-radius: 12px; padding: 16px; }
+.result { background: #f5f5f5; border: 2px solid #e0e0e0; border-radius: 12px; padding: 16px; }
 .result-line { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; }
 .result-line .val { font-weight: 700; }
 .divider { height: 1px; background: var(--border); margin: 10px 0; }
 .big-result { text-align: center; margin-top: 6px; }
-.big-result .lbl { font-size: 13px; color: #c05621; font-weight: 700; display: block; margin-bottom: 4px; }
-.big-result .num { font-size: 36px; color: #d69e2e; font-weight: 900; display: block; }
+.big-result .lbl { font-size: 13px; color: #444; font-weight: 700; display: block; margin-bottom: 4px; }
+.big-result .num { font-size: 36px; color: #111; font-weight: 900; display: block; }
 .big-result .unit { font-size: 15px; color: var(--text); font-weight: 700; }
 .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; }
-.tag-orange { background: #fff3e0; color: #e65100; }
-.tag-blue { background: #e3f2fd; color: #1565c0; }
-.tag-yellow { background: #fff8e1; color: #f9a825; }
-.tag-green { background: #e8f5e9; color: #2e7d32; }
-.tag-red { background: #fbe9e7; color: #c62828; }
-.settings-btn { position: fixed; bottom: 20px; right: 20px; width: 48px; height: 48px; border-radius: 50%; background: var(--primary); color: #fff; border: none; font-size: 22px; cursor: pointer; box-shadow: 0 4px 12px rgba(255,107,0,.35); z-index: 20; display: flex; align-items: center; justify-content: center; }
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 30; align-items: center; justify-content: center; padding: 20px; }
+.tag-orange { background: #f0f0f0; color: #333; }
+.tag-blue { background: #f0f0f0; color: #333; }
+.tag-yellow { background: #f0f0f0; color: #333; }
+.tag-green { background: #f0f0f0; color: #333; }
+.tag-red { background: #f0f0f0; color: #333; }
+.settings-btn { position: fixed; bottom: 20px; right: 20px; width: 48px; height: 48px; border-radius: 50%; background: #1a1a1a; color: #fff; border: none; font-size: 22px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,.25); z-index: 20; display: flex; align-items: center; justify-content: center; transition: background .2s; }
+.settings-btn:hover { background: #333; }
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 30; align-items: center; justify-content: center; padding: 20px; }
 .modal-overlay.show { display: flex; }
 .modal { background: var(--card); border-radius: 16px; width: 100%; max-width: 440px; max-height: 80vh; overflow-y: auto; padding: 20px; }
 .modal h2 { font-size: 16px; margin-bottom: 14px; color: var(--text); }
@@ -62,12 +68,18 @@ body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-seri
 .modal .field label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 3px; font-weight: 600; }
 .modal .field input { width: 100%; padding: 8px 10px; font-size: 14px; border: 2px solid var(--border); border-radius: 6px; outline: none; }
 .modal .field input:focus { border-color: var(--primary); }
-.modal-close { width: 100%; padding: 12px; background: var(--primary); color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 8px; }
+.modal-close { width: 100%; padding: 12px; background: var(--primary); color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 8px; transition: background .2s; }
+.modal-close:hover { background: var(--primary-hover); }
 .empty-state { color: var(--muted); font-size: 13px; text-align: center; padding: 10px 0; }
 .ac-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
 .ac-table th,.ac-table td { padding: 6px 8px; text-align: center; border-bottom: 1px solid var(--border); }
 .ac-table th { font-weight: 700; color: var(--muted); font-size: 11px; }
-.ac-table .highlight { background: #fff9e6; font-weight: 700; }
+.ac-table .highlight { background: #e8e8e8; font-weight: 700; }
+.ac-editor-row { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; }
+.ac-editor-row input { flex: 1; padding: 6px 8px; font-size: 13px; border: 2px solid var(--border); border-radius: 6px; outline: none; text-align: center; }
+.ac-editor-row input:focus { border-color: var(--primary); }
+.ac-editor-row .ac-del-btn { width: 28px; height: 28px; border: none; background: #e53e3e; color: #fff; border-radius: 6px; cursor: pointer; font-size: 14px; flex-shrink: 0; }
+.ac-editor-row .ac-del-btn:hover { background: #c53030; }
 @media (max-width:400px) {
   .tab { font-size: 11px; padding: 8px 4px; }
   .tab .tab-icon { font-size: 16px; }
@@ -79,8 +91,11 @@ body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-seri
 
 <div class="app">
   <div class="header">
-    <h1>裝潢計算器</h1>
-    <div class="sub">天花板 · 冷氣 · 燈光 · 油漆 · 叫料精算</div>
+    <img src="logo.jpg" alt="中區建材行" class="header-logo">
+    <div class="header-text">
+      <h1>裝潢計算器</h1>
+      <div class="sub">天花板 · 冷氣 · 燈光 · 油漆 · 叫料精算</div>
+    </div>
   </div>
 
   <div class="tabs" id="tabs">
@@ -189,17 +204,10 @@ body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-seri
       </div>
     </div>
     <div class="result" id="ac-result">
-      <div class="result-line"><span>原始坪數</span><span class="val" id="ac-raw">0 坪</span></div>
-      <div class="result-line"><span>加權後等效坪數</span><span class="val" id="ac-adjusted">0 坪</span></div>
-      <div class="divider"></div>
-      <div class="big-result">
-        <span class="lbl">建議冷氣能力</span>
-        <span class="num" id="ac-recommend">—</span>
-        <span class="unit" id="ac-recommend-unit"></span>
-      </div>
+      <div class="result-line"><span>加權後坪數</span><span class="val" id="ac-adjusted">— 坪</span></div>
       <div class="divider"></div>
       <table class="ac-table">
-        <thead><tr><th>坪數</th><th>kW</th><th>噸數</th></tr></thead>
+        <thead><tr><th>坪數範圍</th><th>kW</th><th>噸數</th></tr></thead>
         <tbody id="ac-table-body"></tbody>
       </table>
     </div>
@@ -279,7 +287,14 @@ body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-seri
     <div class="field"><label>餘量係數 (燈光)</label><input type="number" id="set-light-factor" value="1.2" min="1.0" max="2.0" step="0.05"></div>
     <div class="field"><label>單盞崁燈流明 (lm)</label><input type="number" id="set-lt-lumen" value="1000" min="300" max="3000"></div>
     <div class="field"><label>角材一支長度 (尺) — 計算用</label><input type="number" id="set-stud-len-ft" value="12" min="4" max="20"></div>
-    <button class="modal-close" onclick="closeSettings()">儲存</button>
+
+    <div class="divider" style="margin:16px 0"></div>
+    <h2 style="font-size:14px;margin-bottom:8px">❄️ 冷氣噸數對應表</h2>
+    <p style="font-size:11px;color:var(--muted);margin-bottom:8px">坪數為上限，例如「5」代表 &lt;5 坪。最后一行坪數填 999 代表以上。</p>
+    <div id="ac-data-editor"></div>
+    <button type="button" class="btn btn-sm" style="margin-top:8px;width:100%;border-style:dashed" onclick="acAddRow()">+ 新增一行</button>
+
+    <button class="modal-close" style="margin-top:16px" onclick="closeSettings()">儲存</button>
   </div>
 </div>
 
@@ -309,10 +324,14 @@ tabs.forEach(t => {
 });
 
 // ====== Settings ======
-function openSettings() { document.getElementById('settingsModal').classList.add('show'); }
+function openSettings() {
+  document.getElementById('settingsModal').classList.add('show');
+  acRenderEditor();
+}
 function closeSettings() {
   document.getElementById('settingsModal').classList.remove('show');
-  clCalc(); ltCalc();
+  acSaveData(acData);
+  acCalc(); clCalc(); ltCalc();
 }
 function getSetting(id, def) {
   const v = parseFloat(document.getElementById(id).value);
@@ -446,20 +465,47 @@ function clCalc() {
 }
 
 // ============================================================
-// 3. 冷氣
+// 3. 冷氣 — 支援 localStorage 自訂對應表
 // ============================================================
-const acData = [
-  { max: 5,   kw: '2.2', ton: '0.8' },
-  { max: 7,   kw: '2.8', ton: '1.0' },
-  { max: 9,   kw: '3.6', ton: '1.3' },
-  { max: 12,  kw: '5.0', ton: '1.7' },
-  { max: 15,  kw: '6.3', ton: '2.2' },
-  { max: 20,  kw: '8.0', ton: '3.0' },
-  { max: 25,  kw: '10.0', ton: '3.6' },
-  { max: 30,  kw: '12.5', ton: '4.5' },
-  { max: 40,  kw: '14.0', ton: '5.0' },
-  { max: 999, kw: '16.0+', ton: '6.0+' }
+const AC_DEFAULT = [
+  { max: 5,   kw: '2.2kW', ton: '1噸' },
+  { max: 7,   kw: '2.8kW', ton: '1.5噸' },
+  { max: 9,   kw: '3.6kW', ton: '2.2噸' }
 ];
+
+function acLoadData() {
+  try {
+    const s = localStorage.getItem('acData');
+    return s ? JSON.parse(s) : [...AC_DEFAULT];
+  } catch { return [...AC_DEFAULT]; }
+}
+function acSaveData(data) {
+  localStorage.setItem('acData', JSON.stringify(data));
+}
+let acData = acLoadData();
+
+function acAddRow() {
+  acData.push({ max: 999, kw: '', ton: '' });
+  acRenderEditor();
+}
+function acDelRow(i) {
+  acData.splice(i, 1);
+  acRenderEditor();
+}
+function acRenderEditor() {
+  const el = document.getElementById('ac-data-editor');
+  el.innerHTML = '';
+  acData.forEach((d, i) => {
+    const row = document.createElement('div');
+    row.className = 'ac-editor-row';
+    row.innerHTML =
+      `<input type="number" value="${d.max}" placeholder="坪數上限" onchange="acData[${i}].max=+this.value">` +
+      `<input type="text" value="${d.kw}" placeholder="kW" onchange="acData[${i}].kw=this.value">` +
+      `<input type="text" value="${d.ton}" placeholder="噸數" onchange="acData[${i}].ton=this.value">` +
+      `<button class="ac-del-btn" onclick="acDelRow(${i})">✕</button>`;
+    el.appendChild(row);
+  });
+}
 
 document.getElementById('ac-weight-group').addEventListener('click', e => {
   const btn = e.target.closest('.btn');
@@ -482,35 +528,28 @@ function acCalc() {
   tbody.innerHTML = '';
 
   if (!raw || raw <= 0) {
-    document.getElementById('ac-raw').textContent = '0 坪';
-    document.getElementById('ac-adjusted').textContent = '0 坪';
-    document.getElementById('ac-recommend').textContent = '—';
-    document.getElementById('ac-recommend-unit').textContent = '';
+    document.getElementById('ac-adjusted').textContent = '— 坪';
     acData.forEach(d => {
       const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${d.max === Infinity ? '40+' : '< ' + d.max}</td><td>${d.kw}</td><td>${d.ton}</td>`;
+      const label = d.max >= 999 ? '40+ 坪' : '< ' + d.max + ' 坪';
+      tr.innerHTML = `<td>${label}</td><td>${d.kw}</td><td>${d.ton}</td>`;
       tbody.appendChild(tr);
     });
     return;
   }
 
   const adj = raw * weight;
-  document.getElementById('ac-raw').textContent = raw + ' 坪';
   document.getElementById('ac-adjusted').textContent = adj.toFixed(1) + ' 坪';
 
-  // find recommendation
   let rec = acData.find(d => adj < d.max);
   if (!rec) rec = acData[acData.length - 1];
-  document.getElementById('ac-recommend').textContent = rec.kw + ' kW';
-  document.getElementById('ac-recommend-unit').textContent = '（' + rec.ton + ' 噸）';
 
-  // build table with range labels
   let prev = 0;
   acData.forEach(d => {
     const tr = document.createElement('tr');
     const isMatch = rec === d;
     if (isMatch) tr.className = 'highlight';
-    const label = d.max === 999 ? prev + ' 坪以上' : prev + '–' + d.max + ' 坪';
+    const label = d.max >= 999 ? prev + ' 坪以上' : prev + '–' + d.max + ' 坪';
     tr.innerHTML = `<td>${label}</td><td>${d.kw}</td><td>${d.ton}</td>`;
     tbody.appendChild(tr);
     prev = d.max;
