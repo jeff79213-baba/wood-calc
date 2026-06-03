@@ -1,5 +1,5 @@
-const CACHE = 'zhuanghuang-v1';
-const URLS = ['index.html', 'manifest.json'];
+const CACHE = 'zhuanghuang-v2';
+const URLS = ['index.html', 'manifest.json', 'logo.jpg', 'qrcode.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(

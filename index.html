@@ -29,6 +29,7 @@ body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto San
 .tab { flex: 1; min-width: 60px; padding: 10px 6px; text-align: center; font-size: 12px; font-weight: 700; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; transition: all .2s; white-space: nowrap; }
 .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
 .tab .tab-icon { display: block; font-size: 18px; margin-bottom: 2px; }
+.tab .tab-icon svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .panel { display: none; padding: 16px; }
 .panel.active { display: block; }
 .card { background: var(--card); border-radius: 12px; padding: 16px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
@@ -60,6 +61,7 @@ body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto San
 .tag-red { background: #f0f0f0; color: #333; }
 .settings-btn { position: fixed; bottom: 20px; right: 20px; width: 48px; height: 48px; border-radius: 50%; background: #1a1a1a; color: #fff; border: none; font-size: 22px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,.25); z-index: 20; display: flex; align-items: center; justify-content: center; transition: background .2s; }
 .settings-btn:hover { background: #333; }
+.settings-btn svg { width: 22px; height: 22px; }
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 30; align-items: center; justify-content: center; padding: 20px; }
 .modal-overlay.show { display: flex; }
 .modal { background: var(--card); border-radius: 16px; width: 100%; max-width: 440px; max-height: 80vh; overflow-y: auto; padding: 20px; }
@@ -99,11 +101,11 @@ body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto San
   </div>
 
   <div class="tabs" id="tabs">
-    <div class="tab active" data-tab="floorwall"><span class="tab-icon">🪵</span>木工</div>
-    <div class="tab" data-tab="ceiling"><span class="tab-icon">⬜</span>天花板</div>
-    <div class="tab" data-tab="ac"><span class="tab-icon">❄️</span>冷氣</div>
-    <div class="tab" data-tab="lighting"><span class="tab-icon">💡</span>燈光</div>
-    <div class="tab" data-tab="paint"><span class="tab-icon">🎨</span>油漆</div>
+    <div class="tab active" data-tab="floorwall"><span class="tab-icon"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></span>木工</div>
+    <div class="tab" data-tab="ceiling"><span class="tab-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="8" cy="6" r="1" fill="currentColor"/><circle cx="16" cy="12" r="1" fill="currentColor"/><circle cx="10" cy="18" r="1" fill="currentColor"/></svg></span>天花板</div>
+    <div class="tab" data-tab="ac"><span class="tab-icon"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="10" rx="2"/><path d="M6 18h4M14 18h4M12 14v4"/></svg></span>冷氣</div>
+    <div class="tab" data-tab="lighting"><span class="tab-icon"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg></span>燈光</div>
+    <div class="tab" data-tab="paint"><span class="tab-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z"/><path d="M12 11v6M8 21h8"/></svg></span>油漆</div>
   </div>
 
   <div id="panel-floorwall" class="panel active">
@@ -276,11 +278,11 @@ body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto San
   </div>
 </div>
 
-<button class="settings-btn" id="settingsBtn" onclick="openSettings()">⚙</button>
+<button class="settings-btn" id="settingsBtn" onclick="openSettings()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
 
 <div class="modal-overlay" id="settingsModal">
   <div class="modal">
-    <h2>⚙ 參數設定</h2>
+    <h2>參數設定</h2>
     <p style="font-size:12px;color:var(--muted);margin-bottom:12px">修改預設值後會即時反映在計算結果中</p>
     <div class="field"><label>角材間距 (cm)</label><input type="number" id="set-stud-spacing" value="40" min="20" max="80"></div>
     <div class="field"><label>LED 效率 (lm/W)</label><input type="number" id="set-led-eff" value="90" min="50" max="150"></div>
@@ -289,7 +291,7 @@ body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto San
     <div class="field"><label>角材一支長度 (尺) — 計算用</label><input type="number" id="set-stud-len-ft" value="12" min="4" max="20"></div>
 
     <div class="divider" style="margin:16px 0"></div>
-    <h2 style="font-size:14px;margin-bottom:8px">❄️ 冷氣噸數對應表</h2>
+    <h2 style="font-size:14px;margin-bottom:8px">冷氣噸數對應表</h2>
     <p style="font-size:11px;color:var(--muted);margin-bottom:8px">坪數為上限，例如「5」代表 &lt;5 坪。最后一行坪數填 999 代表以上。</p>
     <div id="ac-data-editor"></div>
     <button type="button" class="btn btn-sm" style="margin-top:8px;width:100%;border-style:dashed" onclick="acAddRow()">+ 新增一行</button>
