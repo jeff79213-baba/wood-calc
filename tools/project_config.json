@@ -1,0 +1,32 @@
+{
+  "_說明": "把房間照片放到 tools/ 資料夾，改 room_photo 為你的檔名即可",
+  "project_name": "測試專案",
+  "room_photo": "room.jpg",
+  "regions": [
+    {
+      "name": "主牆",
+      "polygon": [],
+      "materials": [
+        { "name": "白色磁磚", "file": "default_materials/white_tile.jpg" },
+        { "name": "灰色清水模", "file": "default_materials/concrete_gray.jpg" },
+        { "name": "白色大理石", "file": "default_materials/marble_white.jpg" }
+      ]
+    },
+    {
+      "name": "地板",
+      "polygon": [],
+      "materials": [
+        { "name": "淺色木紋", "file": "default_materials/wood_light.jpg" },
+        { "name": "深色木紋", "file": "default_materials/wood_dark.jpg" },
+        { "name": "灰色清水模", "file": "default_materials/concrete_gray.jpg" }
+      ]
+    },
+    {
+      "name": "天花板",
+      "polygon": [],
+      "materials": [
+        { "name": "白色磁磚", "file": "default_materials/white_tile.jpg" }
+      ]
+    }
+  ]
+}

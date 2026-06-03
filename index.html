@@ -1,367 +1,598 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>木工現場快速叫料計算器</title>
-    <style>
-        :root {
-            --bg-color: #f4f6f9;
-            --card-bg: #ffffff;
-            --primary: #ff6b00;
-            --primary-hover: #e05e00;
-            --text-main: #2d3748;
-            --text-muted: #718096;
-            --result-bg: #fff9e6;
-            --result-border: #ffe0b3;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            padding: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 500px;
-            background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            padding: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 22px;
-            margin-bottom: 20px;
-            color: var(--primary);
-            font-weight: 800;
-        }
-
-        .section-title {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            background: #fff;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            color: var(--text-main);
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-        }
-
-        .btn.active {
-            background: var(--primary);
-            color: #fff;
-            border-color: var(--primary);
-        }
-
-        .input-row {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .input-field {
-            flex: 1;
-        }
-
-        .input-field input {
-            width: 100%;
-            padding: 14px;
-            font-size: 18px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            outline: none;
-            font-weight: bold;
-            color: var(--text-main);
-            background: #f8fafc;
-        }
-
-        .input-field input:focus {
-            border-color: var(--primary);
-            background: #fff;
-        }
-
-        .select-field {
-            width: 100%;
-            padding: 14px;
-            font-size: 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            outline: none;
-            font-weight: bold;
-            color: var(--text-main);
-            background: #f8fafc;
-            margin-bottom: 20px;
-            appearance: none;
-            -webkit-appearance: none;
-            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23718096' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            background-size: 16px;
-        }
-
-        .result-card {
-            background: var(--result-bg);
-            border: 2px solid var(--result-border);
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 5px;
-        }
-
-        .result-line {
-            display: flex;
-            justify-content: space-between;
-            font-size: 16px;
-            margin-bottom: 10px;
-            color: var(--text-main);
-        }
-
-        .result-line span:last-child {
-            font-weight: bold;
-        }
-
-        .divider {
-            height: 1px;
-            background: var(--result-border);
-            margin: 12px 0;
-        }
-
-        .final-qty {
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .final-qty .title {
-            font-size: 15px;
-            color: #c05621;
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .final-qty .number {
-            font-size: 42px;
-            color: #d69e2e;
-            font-weight: 900;
-            display: block;
-            text-shadow: 1px 1px 0px #fff;
-        }
-
-        .final-qty .unit {
-            font-size: 18px;
-            color: var(--text-main);
-            font-weight: bold;
-        }
-
-        .toast {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #3182ce;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: bold;
-            display: none;
-            z-index: 999;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="theme-color" content="#ff6b00">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.json">
+<title>裝潢計算器</title>
+<style>
+:root {
+  --bg: #f4f6f9; --card: #fff; --primary: #ff6b00; --primary-hover: #e05e00;
+  --text: #2d3748; --muted: #718096; --border: #e2e8f0;
+  --tab-height: 52px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background: var(--bg); color: var(--text); }
+.app { max-width: 520px; margin: 0 auto; padding: 0 0 30px; }
+.header { background: var(--primary); color: #fff; padding: 14px 16px; text-align: center; position: sticky; top: 0; z-index: 10; }
+.header h1 { font-size: 18px; font-weight: 800; }
+.header .sub { font-size: 11px; opacity: .8; margin-top: 2px; }
+.tabs { display: flex; background: var(--card); border-bottom: 2px solid var(--border); position: sticky; top: 52px; z-index: 9; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { flex: 1; min-width: 60px; padding: 10px 6px; text-align: center; font-size: 12px; font-weight: 700; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; transition: all .2s; white-space: nowrap; }
+.tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+.tab .tab-icon { display: block; font-size: 18px; margin-bottom: 2px; }
+.panel { display: none; padding: 16px; }
+.panel.active { display: block; }
+.card { background: var(--card); border-radius: 12px; padding: 16px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+.card-title { font-size: 13px; font-weight: 700; color: var(--muted); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.row { display: flex; gap: 10px; margin-bottom: 12px; }
+.col { flex: 1; }
+.col label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 3px; font-weight: 600; }
+.col input,.col select { width: 100%; padding: 10px 12px; font-size: 15px; border: 2px solid var(--border); border-radius: 8px; outline: none; background: #f8fafc; color: var(--text); font-weight: 600; }
+.col input:focus,.col select:focus { border-color: var(--primary); background: #fff; }
+.col select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23718096' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; background-size: 14px; }
+.btn-group { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+.btn { flex: 1; padding: 10px; border: 2px solid var(--border); background: #fff; border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--text); cursor: pointer; transition: all .15s; text-align: center; min-width: 60px; }
+.btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.btn-sm { padding: 6px 10px; font-size: 12px; flex: 0 1 auto; }
+.result { background: #fff9e6; border: 2px solid #ffe0b3; border-radius: 12px; padding: 16px; }
+.result-line { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; }
+.result-line .val { font-weight: 700; }
+.divider { height: 1px; background: var(--border); margin: 10px 0; }
+.big-result { text-align: center; margin-top: 6px; }
+.big-result .lbl { font-size: 13px; color: #c05621; font-weight: 700; display: block; margin-bottom: 4px; }
+.big-result .num { font-size: 36px; color: #d69e2e; font-weight: 900; display: block; }
+.big-result .unit { font-size: 15px; color: var(--text); font-weight: 700; }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+.tag-orange { background: #fff3e0; color: #e65100; }
+.tag-blue { background: #e3f2fd; color: #1565c0; }
+.tag-yellow { background: #fff8e1; color: #f9a825; }
+.tag-green { background: #e8f5e9; color: #2e7d32; }
+.tag-red { background: #fbe9e7; color: #c62828; }
+.settings-btn { position: fixed; bottom: 20px; right: 20px; width: 48px; height: 48px; border-radius: 50%; background: var(--primary); color: #fff; border: none; font-size: 22px; cursor: pointer; box-shadow: 0 4px 12px rgba(255,107,0,.35); z-index: 20; display: flex; align-items: center; justify-content: center; }
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 30; align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.show { display: flex; }
+.modal { background: var(--card); border-radius: 16px; width: 100%; max-width: 440px; max-height: 80vh; overflow-y: auto; padding: 20px; }
+.modal h2 { font-size: 16px; margin-bottom: 14px; color: var(--text); }
+.modal .field { margin-bottom: 12px; }
+.modal .field label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 3px; font-weight: 600; }
+.modal .field input { width: 100%; padding: 8px 10px; font-size: 14px; border: 2px solid var(--border); border-radius: 6px; outline: none; }
+.modal .field input:focus { border-color: var(--primary); }
+.modal-close { width: 100%; padding: 12px; background: var(--primary); color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 8px; }
+.empty-state { color: var(--muted); font-size: 13px; text-align: center; padding: 10px 0; }
+.ac-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+.ac-table th,.ac-table td { padding: 6px 8px; text-align: center; border-bottom: 1px solid var(--border); }
+.ac-table th { font-weight: 700; color: var(--muted); font-size: 11px; }
+.ac-table .highlight { background: #fff9e6; font-weight: 700; }
+@media (max-width:400px) {
+  .tab { font-size: 11px; padding: 8px 4px; }
+  .tab .tab-icon { font-size: 16px; }
+  .col input,.col select { padding: 8px 10px; font-size: 14px; }
+}
+</style>
 </head>
 <body>
 
-    <div id="toast" class="toast">請輸入正確的尺寸喔！</div>
+<div class="app">
+  <div class="header">
+    <h1>裝潢計算器</h1>
+    <div class="sub">天花板 · 冷氣 · 燈光 · 油漆 · 叫料精算</div>
+  </div>
 
-    <div class="container">
-        <h1>🪵 木工現場快速叫料計算器</h1>
+  <div class="tabs" id="tabs">
+    <div class="tab active" data-tab="floorwall"><span class="tab-icon">🪵</span>木工</div>
+    <div class="tab" data-tab="ceiling"><span class="tab-icon">⬜</span>天花板</div>
+    <div class="tab" data-tab="ac"><span class="tab-icon">❄️</span>冷氣</div>
+    <div class="tab" data-tab="lighting"><span class="tab-icon">💡</span>燈光</div>
+    <div class="tab" data-tab="paint"><span class="tab-icon">🎨</span>油漆</div>
+  </div>
 
-        <div class="section-title">第一步：選擇施工位置</div>
-        <div class="btn-group">
-            <button class="btn active" id="type-floor" onclick="switchType('floor')">地板 🪵</button>
-            <button class="btn" id="type-wall" onclick="switchType('wall')">牆面 🧱</button>
+  <div id="panel-floorwall" class="panel active">
+    <div class="card">
+      <div class="card-title"><span class="tag tag-red">●</span> 木工現場叫料（地板／牆面）</div>
+      <div class="row">
+        <div class="col"><label>施工位置</label>
+          <select id="fw-type" onchange="fwInit()"><option value="floor">地板</option><option value="wall">牆面</option></select>
         </div>
-
-        <div class="section-title">第二步：選擇輸入單位</div>
-        <div class="btn-group">
-            <button class="btn active" id="unit-cm" onclick="switchUnit('cm')">公分 (cm)</button>
-            <button class="btn" id="unit-ft" onclick="switchUnit('ft')">台尺</button>
+        <div class="col"><label>單位</label>
+          <select id="fw-unit" onchange="fwCalc()"><option value="cm">公分 cm</option><option value="ft">台尺</option></select>
         </div>
-
-        <div class="section-title" id="dim-title">第三步：輸入現場尺寸</div>
-        <div class="input-row">
-            <div class="input-field">
-                <input type="number" id="input-length" placeholder="長度" oninput="calculate()" min="0">
-            </div>
-            <div class="input-field">
-                <input type="number" id="input-width" placeholder="寬度/高度" oninput="calculate()" min="0">
-            </div>
+      </div>
+      <div class="row">
+        <div class="col"><label>長度</label><input type="number" id="fw-len" placeholder="長度" oninput="fwCalc()" min="0"></div>
+        <div class="col"><label>寬度／高度</label><input type="number" id="fw-wid" placeholder="寬度" oninput="fwCalc()" min="0"></div>
+      </div>
+      <div class="row">
+        <div class="col"><label>建材規格</label>
+          <select id="fw-spec" onchange="fwCalc()"></select>
         </div>
-
-        <div class="section-title">第四步：選擇建材規格</div>
-        <select id="material-spec" class="select-field" onchange="calculate()">
-            </select>
-
-        <div class="section-title">第五步：抓追加耗損率</div>
-        <div class="btn-group">
-            <button class="btn active" id="loss-10" onclick="switchLoss(0.10)">10% (方正)</button>
-            <button class="btn" id="loss-15" onclick="switchLoss(0.15)">15% (多梁柱)</button>
-        </div>
-
-        <div class="result-card">
-            <div class="result-line">
-                <span>測量淨面積：</span>
-                <span id="res-net">0.00 坪</span>
-            </div>
-            <div class="result-line">
-                <span>含耗損總面積：</span>
-                <span id="res-total">0.00 坪</span>
-            </div>
-            <div class="divider"></div>
-            <div class="final-qty">
-                <span class="title">📢 建議向建材行叫料數量</span>
-                <span class="number" id="res-qty">0</span>
-                <span class="unit" id="res-unit">片</span>
-            </div>
-        </div>
+      </div>
+      <div class="card-title" style="margin-bottom:4px">耗損率</div>
+      <div class="btn-group" id="fw-loss-group">
+        <div class="btn active" data-loss="0.10">10% (方正)</div>
+        <div class="btn" data-loss="0.15">15% (多梁柱)</div>
+      </div>
     </div>
+    <div class="result" id="fw-result">
+      <div class="result-line"><span>測量淨面積</span><span class="val" id="fw-net">0.00 坪</span></div>
+      <div class="result-line"><span>含耗損總面積</span><span class="val" id="fw-total">0.00 坪</span></div>
+      <div class="divider"></div>
+      <div class="big-result">
+        <span class="lbl">建議向建材行叫料數量</span>
+        <span class="num" id="fw-qty">0</span>
+        <span class="unit" id="fw-unit-label">片</span>
+      </div>
+    </div>
+  </div>
 
-    <script>
-        let currentType = 'floor';
-        let currentUnit = 'cm';
-        let currentLoss = 0.10;
+  <div id="panel-ceiling" class="panel">
+    <div class="card">
+      <div class="card-title"><span class="tag tag-orange">●</span> 天花板角材與板材叫料</div>
+      <div class="row">
+        <div class="col"><label>長度</label><input type="number" id="cl-len" placeholder="長度" oninput="clCalc()" min="0"></div>
+        <div class="col"><label>寬度</label><input type="number" id="cl-wid" placeholder="寬度" oninput="clCalc()" min="0"></div>
+      </div>
+      <div class="row">
+        <div class="col"><label>單位</label>
+          <select id="cl-unit" onchange="clCalc()"><option value="cm">公分 cm</option><option value="ft">台尺</option></select>
+        </div>
+        <div class="col"><label>損耗率</label>
+          <select id="cl-loss" onchange="clCalc()"><option value="0.10">10%</option><option value="0.15">15%</option></select>
+        </div>
+      </div>
+      <div class="card-title" style="margin-bottom:4px">角材規格</div>
+      <div class="btn-group" id="cl-stud-group">
+        <div class="btn active" data-stud="2.5x1_12">寸2×1寸 12尺</div>
+        <div class="btn" data-stud="1.8x1_12">寸8×1寸 12尺</div>
+        <div class="btn" data-stud="2.5x1_8">寸2×1寸 8尺</div>
+        <div class="btn" data-stud="1.8x1_8">寸8×1寸 8尺</div>
+      </div>
+      <div class="row">
+        <div class="col"><label>板材規格</label>
+          <select id="cl-board" onchange="clCalc()">
+            <option value="3x6">3×6 尺 矽酸鈣板 (0.50 坪)</option>
+            <option value="4x8">4×8 尺 矽酸鈣板 (0.88 坪)</option>
+          </select>
+        </div>
+        <div class="col"><label>角材方向</label>
+          <select id="cl-dir" onchange="clCalc()">
+            <option value="both">雙向 (縱橫)</option>
+            <option value="single">單向</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="result" id="cl-result">
+      <div class="result-line"><span>總坪數</span><span class="val" id="cl-ping">0.00 坪</span></div>
+      <div class="result-line"><span>含耗損坪數</span><span class="val" id="cl-loss-ping">0.00 坪</span></div>
+      <div class="divider"></div>
+      <div class="result-line"><span>建議角材支數 (<span id="cl-stud-label">12尺</span>)</span><span class="val" id="cl-stud-qty">0 支</span></div>
+      <div class="result-line"><span>建議板材片數</span><span class="val" id="cl-board-qty">0 片</span></div>
+    </div>
+  </div>
 
-        const specs = {
-            floor: [
-                { text: '木地板箱裝 (每箱抓 0.5 坪)', val: 0.5, unit: '箱' },
-                { text: '木地板箱裝 (每箱抓 0.6 坪)', val: 0.6, unit: '箱' },
-                { text: '4x8 尺 木地板材 (每片 0.88 坪)', val: 0.88, unit: '片' }
-            ],
-            wall: [
-                { text: '4x8 尺 板材 (夾板/矽酸鈣板 - 0.88 坪)', val: 0.88, unit: '片' },
-                { text: '3x6 尺 板材 (每片 0.5 坪)', val: 0.5, unit: '片' }
-            ]
-        };
+  <div id="panel-ac" class="panel">
+    <div class="card">
+      <div class="card-title"><span class="tag tag-blue">●</span> 空間噸數對應</div>
+      <div class="row">
+        <div class="col"><label>空間坪數</label><input type="number" id="ac-ping" placeholder="ex: 8" oninput="acCalc()" min="0" step="0.5"></div>
+      </div>
+      <div class="card-title" style="margin-bottom:4px">環境加權（可複選）</div>
+      <div class="btn-group" id="ac-weight-group">
+        <div class="btn" data-weight="roof">頂樓 +15%</div>
+        <div class="btn" data-weight="west">西曬 +10%</div>
+        <div class="btn" data-weight="living">客廳 +5%</div>
+      </div>
+    </div>
+    <div class="result" id="ac-result">
+      <div class="result-line"><span>原始坪數</span><span class="val" id="ac-raw">0 坪</span></div>
+      <div class="result-line"><span>加權後等效坪數</span><span class="val" id="ac-adjusted">0 坪</span></div>
+      <div class="divider"></div>
+      <div class="big-result">
+        <span class="lbl">建議冷氣能力</span>
+        <span class="num" id="ac-recommend">—</span>
+        <span class="unit" id="ac-recommend-unit"></span>
+      </div>
+      <div class="divider"></div>
+      <table class="ac-table">
+        <thead><tr><th>坪數</th><th>kW</th><th>噸數</th></tr></thead>
+        <tbody id="ac-table-body"></tbody>
+      </table>
+    </div>
+  </div>
 
-        function initSpecDropdown() {
-            const dropdown = document.getElementById('material-spec');
-            dropdown.innerHTML = '';
-            specs[currentType].forEach(item => {
-                const opt = document.createElement('option');
-                opt.value = item.val;
-                opt.dataset.unit = item.unit;
-                opt.textContent = item.text;
-                dropdown.appendChild(opt);
-            });
-        }
+  <div id="panel-lighting" class="panel">
+    <div class="card">
+      <div class="card-title"><span class="tag tag-yellow">●</span> 崁燈與瓦數配置</div>
+      <div class="row">
+        <div class="col"><label>空間坪數</label><input type="number" id="lt-ping" placeholder="ex: 8" oninput="ltCalc()" min="0" step="0.5"></div>
+        <div class="col"><label>空間類型</label>
+          <select id="lt-type" onchange="ltCalc()">
+            <option value="living">客廳 (200 Lux)</option>
+            <option value="study">書房 (500 Lux)</option>
+            <option value="bedroom">臥室 (150 Lux)</option>
+            <option value="kitchen">廚房 (350 Lux)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="result" id="lt-result">
+      <div class="result-line"><span>目標照度</span><span class="val" id="lt-lux">—</span></div>
+      <div class="result-line"><span>建議總流明</span><span class="val" id="lt-lumen">—</span></div>
+      <div class="result-line"><span>建議總瓦數</span><span class="val" id="lt-watt">—</span></div>
+      <div class="divider"></div>
+      <div class="result-line"><span>建議崁燈盞數 (10W/盞)</span><span class="val" id="lt-count10">—</span></div>
+      <div class="result-line"><span>建議崁燈盞數 (15W/盞)</span><span class="val" id="lt-count15">—</span></div>
+      <div class="result-line"><span>建議瓦數 / 盞</span><span class="val" id="lt-per-unit">—</span></div>
+    </div>
+  </div>
 
-        function switchType(type) {
-            currentType = type;
-            document.getElementById('type-floor').classList.toggle('active', type === 'floor');
-            document.getElementById('type-wall').classList.toggle('active', type === 'wall');
-            document.getElementById('input-width').placeholder = type === 'floor' ? '寬度' : '高度';
-            initSpecDropdown();
-            calculate();
-        }
+  <div id="panel-paint" class="panel">
+    <div class="card">
+      <div class="card-title"><span class="tag tag-green">●</span> 乳膠漆用量精算</div>
+      <div class="row">
+        <div class="col"><label>施作坪數</label><input type="number" id="pt-ping" placeholder="ex: 20" oninput="ptCalc()" min="0" step="0.5"></div>
+        <div class="col"><label>油漆種類</label>
+          <select id="pt-type" onchange="ptCalc()">
+            <option value="latex">水性乳膠漆 (6.7 坪/加侖)</option>
+            <option value="cement">水性水泥漆 (6.4 坪/加侖)</option>
+            <option value="oil">油性水泥漆 (7.1 坪/加侖)</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col"><label>施作道數</label>
+          <select id="pt-coats" onchange="ptCalc()">
+            <option value="1">1 道</option>
+            <option value="2" selected>2 道 (標準)</option>
+            <option value="3">3 道</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="result" id="pt-result">
+      <div class="result-line"><span>施作面積</span><span class="val" id="pt-area">0 坪</span></div>
+      <div class="result-line"><span>單道涵蓋率</span><span class="val" id="pt-cover">—</span></div>
+      <div class="divider"></div>
+      <div class="big-result">
+        <span class="lbl">建議購買量</span>
+        <span class="num" id="pt-gallons">0</span>
+        <span class="unit">加侖</span>
+      </div>
+      <div class="result-line" style="margin-top:8px"><span>相當於</span><span class="val" id="pt-buckets">—</span></div>
+    </div>
+  </div>
+</div>
 
-        function switchUnit(unit) {
-            currentUnit = unit;
-            document.getElementById('unit-cm').classList.toggle('active', unit === 'cm');
-            document.getElementById('unit-ft').classList.toggle('active', unit === 'ft');
-            document.getElementById('input-length').value = '';
-            document.getElementById('input-width').value = '';
-            document.getElementById('input-length').placeholder = unit === 'cm' ? '長度 (公分)' : '長度 (台尺)';
-            document.getElementById('input-width').placeholder = currentType === 'floor' 
-                ? (unit === 'cm' ? '寬度 (公分)' : '寬度 (台尺)')
-                : (unit === 'cm' ? '高度 (公分)' : '高度 (台尺)');
-            calculate();
-        }
+<button class="settings-btn" id="settingsBtn" onclick="openSettings()">⚙</button>
 
-        function switchLoss(rate) {
-            currentLoss = rate;
-            document.getElementById('loss-10').classList.toggle('active', rate === 0.10);
-            document.getElementById('loss-15').classList.toggle('active', rate === 0.15);
-            calculate();
-        }
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal">
+    <h2>⚙ 參數設定</h2>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:12px">修改預設值後會即時反映在計算結果中</p>
+    <div class="field"><label>角材間距 (cm)</label><input type="number" id="set-stud-spacing" value="40" min="20" max="80"></div>
+    <div class="field"><label>LED 效率 (lm/W)</label><input type="number" id="set-led-eff" value="90" min="50" max="150"></div>
+    <div class="field"><label>餘量係數 (燈光)</label><input type="number" id="set-light-factor" value="1.2" min="1.0" max="2.0" step="0.05"></div>
+    <div class="field"><label>單盞崁燈流明 (lm)</label><input type="number" id="set-lt-lumen" value="1000" min="300" max="3000"></div>
+    <div class="field"><label>角材一支長度 (尺) — 計算用</label><input type="number" id="set-stud-len-ft" value="12" min="4" max="20"></div>
+    <button class="modal-close" onclick="closeSettings()">儲存</button>
+  </div>
+</div>
 
-        function calculate() {
-            const len = parseFloat(document.getElementById('input-length').value);
-            const wid = parseFloat(document.getElementById('input-width').value);
-            const dropdown = document.getElementById('material-spec');
-            if (!dropdown.value) return;
-            const specCoverage = parseFloat(dropdown.value);
-            const itemUnit = dropdown.options[dropdown.selectedIndex].dataset.unit;
+<script>
+// ====== PWA registration ======
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
 
-            if (len < 0 || wid < 0) {
-                showToast();
-                return;
-            }
+// ====== Tab switching ======
+const tabs = document.querySelectorAll('.tab');
+const panels = {
+  floorwall: document.getElementById('panel-floorwall'),
+  ceiling: document.getElementById('panel-ceiling'),
+  ac: document.getElementById('panel-ac'),
+  lighting: document.getElementById('panel-lighting'),
+  paint: document.getElementById('panel-paint')
+};
+tabs.forEach(t => {
+  t.addEventListener('click', () => {
+    tabs.forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    Object.keys(panels).forEach(k => panels[k].classList.toggle('active', k === t.dataset.tab));
+  });
+});
 
-            if (!len || !wid) {
-                document.getElementById('res-net').textContent = '0.00 坪';
-                document.getElementById('res-total').textContent = '0.00 坪';
-                document.getElementById('res-qty').textContent = '0';
-                document.getElementById('res-unit').textContent = itemUnit;
-                return;
-            }
+// ====== Settings ======
+function openSettings() { document.getElementById('settingsModal').classList.add('show'); }
+function closeSettings() {
+  document.getElementById('settingsModal').classList.remove('show');
+  clCalc(); ltCalc();
+}
+function getSetting(id, def) {
+  const v = parseFloat(document.getElementById(id).value);
+  return isNaN(v) ? def : v;
+}
 
-            let netPing = 0;
-            if (currentUnit === 'cm') {
-                netPing = (len * wid) / 32400;
-            } else if (currentUnit === 'ft') {
-                netPing = (len * wid) / 36;
-            }
+// ====== Utility ======
+function pingFromCm(l, w) { return l * w / 32400; }
+function pingFromFt(l, w) { return l * w / 36; }
+function cmToFt(c) { return c / 30.3; }
 
-            const totalPing = netPing * (1 + currentLoss);
-            const finalQty = Math.ceil(totalPing / specCoverage);
+// ============================================================
+// 1. 木工 (地板/牆面) — 保留原有邏輯
+// ============================================================
+const fwSpecs = {
+  floor: [
+    { text: '木地板箱裝 (每箱 0.5 坪)', val: 0.5, unit: '箱' },
+    { text: '木地板箱裝 (每箱 0.6 坪)', val: 0.6, unit: '箱' },
+    { text: '4×8 尺 木地板材 (每片 0.88 坪)', val: 0.88, unit: '片' }
+  ],
+  wall: [
+    { text: '4×8 尺 板材 (夾板/矽酸鈣板 0.88 坪)', val: 0.88, unit: '片' },
+    { text: '3×6 尺 板材 (每片 0.50 坪)', val: 0.50, unit: '片' }
+  ]
+};
+let fwLoss = 0.10;
 
-            document.getElementById('res-net').textContent = netPing.toFixed(2) + ' 坪';
-            document.getElementById('res-total').textContent = totalPing.toFixed(2) + ' 坪';
-            document.getElementById('res-qty').textContent = finalQty;
-            document.getElementById('res-unit').textContent = itemUnit;
-        }
+function fwInit() {
+  const type = document.getElementById('fw-type').value;
+  const sel = document.getElementById('fw-spec');
+  sel.innerHTML = '';
+  fwSpecs[type].forEach(s => {
+    const o = document.createElement('option');
+    o.value = s.val; o.dataset.unit = s.unit; o.textContent = s.text;
+    sel.appendChild(o);
+  });
+  fwCalc();
+}
 
-        function showToast() {
-            const toast = document.getElementById('toast');
-            toast.style.display = 'block';
-            setTimeout(() => { toast.style.display = 'none'; }, 2000);
-            document.getElementById('input-length').value = '';
-            document.getElementById('input-width').value = '';
-        }
+document.getElementById('fw-loss-group').addEventListener('click', e => {
+  const btn = e.target.closest('.btn');
+  if (!btn) return;
+  document.querySelectorAll('#fw-loss-group .btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  fwLoss = parseFloat(btn.dataset.loss);
+  fwCalc();
+});
 
-        window.onload = function() {
-            initSpecDropdown();
-        };
-    </script>
+function fwCalc() {
+  const len = parseFloat(document.getElementById('fw-len').value);
+  const wid = parseFloat(document.getElementById('fw-wid').value);
+  const unit = document.getElementById('fw-unit').value;
+  const sel = document.getElementById('fw-spec');
+  if (!len || !wid || len < 0 || wid < 0) {
+    document.getElementById('fw-net').textContent = '0.00 坪';
+    document.getElementById('fw-total').textContent = '0.00 坪';
+    document.getElementById('fw-qty').textContent = '0';
+    return;
+  }
+  const spec = parseFloat(sel.value);
+  const u = sel.options[sel.selectedIndex]?.dataset?.unit || '片';
+  const net = unit === 'cm' ? pingFromCm(len, wid) : pingFromFt(len, wid);
+  const total = net * (1 + fwLoss);
+  const qty = Math.ceil(total / spec);
+  document.getElementById('fw-net').textContent = net.toFixed(2) + ' 坪';
+  document.getElementById('fw-total').textContent = total.toFixed(2) + ' 坪';
+  document.getElementById('fw-qty').textContent = qty;
+  document.getElementById('fw-unit-label').textContent = u;
+}
+
+// ============================================================
+// 2. 天花板
+// ============================================================
+let clStud = '2.5x1_12';
+
+document.getElementById('cl-stud-group').addEventListener('click', e => {
+  const btn = e.target.closest('.btn');
+  if (!btn) return;
+  document.querySelectorAll('#cl-stud-group .btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  clStud = btn.dataset.stud;
+  clCalc();
+});
+
+function clCalc() {
+  const len = parseFloat(document.getElementById('cl-len').value);
+  const wid = parseFloat(document.getElementById('cl-wid').value);
+  const unit = document.getElementById('cl-unit').value;
+  const loss = parseFloat(document.getElementById('cl-loss').value);
+  const board = document.getElementById('cl-board').value;
+  const dir = document.getElementById('cl-dir').value;
+  const spacing = getSetting('set-stud-spacing', 40);
+
+  if (!len || !wid || len <= 0 || wid <= 0) {
+    ['cl-ping','cl-loss-ping'].forEach(id => document.getElementById(id).textContent = '0.00 坪');
+    document.getElementById('cl-stud-qty').textContent = '0 支';
+    document.getElementById('cl-board-qty').textContent = '0 片';
+    return;
+  }
+
+  // convert to cm
+  const L = unit === 'cm' ? len : len * 30.3;
+  const W = unit === 'cm' ? wid : wid * 30.3;
+
+  const ping = pingFromCm(L, W);
+  const lossPing = ping * (1 + loss);
+
+  // board
+  const boardPing = board === '3x6' ? 0.50 : 0.88;
+  const boardQty = Math.ceil(lossPing / boardPing);
+
+  // stud: determine stud length in cm
+  const is12 = clStud.includes('12');
+  const studLenCm = (is12 ? 12 : 8) * 30.3;
+
+  const rows1 = Math.ceil(L / spacing) + 1;
+  const perRow1 = Math.ceil(W / studLenCm);
+  let studs = rows1 * perRow1;
+
+  if (dir === 'both') {
+    const rows2 = Math.ceil(W / spacing) + 1;
+    const perRow2 = Math.ceil(L / studLenCm);
+    studs += rows2 * perRow2;
+  }
+
+  document.getElementById('cl-ping').textContent = ping.toFixed(2) + ' 坪';
+  document.getElementById('cl-loss-ping').textContent = lossPing.toFixed(2) + ' 坪';
+  document.getElementById('cl-stud-label').textContent = is12 ? '12尺' : '8尺';
+  document.getElementById('cl-stud-qty').textContent = studs + ' 支';
+  document.getElementById('cl-board-qty').textContent = boardQty + ' 片';
+}
+
+// ============================================================
+// 3. 冷氣
+// ============================================================
+const acData = [
+  { max: 5,   kw: '2.2', ton: '0.8' },
+  { max: 7,   kw: '2.8', ton: '1.0' },
+  { max: 9,   kw: '3.6', ton: '1.3' },
+  { max: 12,  kw: '5.0', ton: '1.7' },
+  { max: 15,  kw: '6.3', ton: '2.2' },
+  { max: 20,  kw: '8.0', ton: '3.0' },
+  { max: 25,  kw: '10.0', ton: '3.6' },
+  { max: 30,  kw: '12.5', ton: '4.5' },
+  { max: 40,  kw: '14.0', ton: '5.0' },
+  { max: 999, kw: '16.0+', ton: '6.0+' }
+];
+
+document.getElementById('ac-weight-group').addEventListener('click', e => {
+  const btn = e.target.closest('.btn');
+  if (!btn) return;
+  btn.classList.toggle('active');
+  acCalc();
+});
+
+function acCalc() {
+  const raw = parseFloat(document.getElementById('ac-ping').value);
+  const activeBtns = document.querySelectorAll('#ac-weight-group .btn.active');
+  let weight = 1;
+  activeBtns.forEach(b => {
+    if (b.dataset.weight === 'roof') weight += 0.15;
+    if (b.dataset.weight === 'west') weight += 0.10;
+    if (b.dataset.weight === 'living') weight += 0.05;
+  });
+
+  const tbody = document.getElementById('ac-table-body');
+  tbody.innerHTML = '';
+
+  if (!raw || raw <= 0) {
+    document.getElementById('ac-raw').textContent = '0 坪';
+    document.getElementById('ac-adjusted').textContent = '0 坪';
+    document.getElementById('ac-recommend').textContent = '—';
+    document.getElementById('ac-recommend-unit').textContent = '';
+    acData.forEach(d => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${d.max === Infinity ? '40+' : '< ' + d.max}</td><td>${d.kw}</td><td>${d.ton}</td>`;
+      tbody.appendChild(tr);
+    });
+    return;
+  }
+
+  const adj = raw * weight;
+  document.getElementById('ac-raw').textContent = raw + ' 坪';
+  document.getElementById('ac-adjusted').textContent = adj.toFixed(1) + ' 坪';
+
+  // find recommendation
+  let rec = acData.find(d => adj < d.max);
+  if (!rec) rec = acData[acData.length - 1];
+  document.getElementById('ac-recommend').textContent = rec.kw + ' kW';
+  document.getElementById('ac-recommend-unit').textContent = '（' + rec.ton + ' 噸）';
+
+  // build table with range labels
+  let prev = 0;
+  acData.forEach(d => {
+    const tr = document.createElement('tr');
+    const isMatch = rec === d;
+    if (isMatch) tr.className = 'highlight';
+    const label = d.max === 999 ? prev + ' 坪以上' : prev + '–' + d.max + ' 坪';
+    tr.innerHTML = `<td>${label}</td><td>${d.kw}</td><td>${d.ton}</td>`;
+    tbody.appendChild(tr);
+    prev = d.max;
+  });
+}
+
+// ============================================================
+// 4. 燈光
+// ============================================================
+const ltLuxMap = { living: 200, study: 500, bedroom: 150, kitchen: 350 };
+
+function ltCalc() {
+  const ping = parseFloat(document.getElementById('lt-ping').value);
+  const type = document.getElementById('lt-type').value;
+  const targetLux = ltLuxMap[type];
+  const ledEff = getSetting('set-led-eff', 90);
+  const factor = getSetting('set-light-factor', 1.2);
+  const singleLumen = getSetting('set-lt-lumen', 1000);
+
+  document.getElementById('lt-lux').textContent = targetLux + ' Lux';
+
+  if (!ping || ping <= 0) {
+    ['lt-lumen','lt-watt','lt-count10','lt-count15','lt-per-unit'].forEach(id =>
+      document.getElementById(id).textContent = '—'
+    );
+    return;
+  }
+
+  const areaM2 = ping * 3.3058;
+  const totalLumen = Math.round(areaM2 * targetLux * factor);
+  const totalWatt = Math.ceil(totalLumen / ledEff);
+  const count10 = Math.ceil(totalLumen / (10 * ledEff));
+  const count15 = Math.ceil(totalLumen / (15 * ledEff));
+  const perUnitW = Math.ceil(singleLumen / ledEff);
+
+  document.getElementById('lt-lumen').textContent = totalLumen.toLocaleString() + ' lm';
+  document.getElementById('lt-watt').textContent = totalWatt + ' W';
+  document.getElementById('lt-count10').textContent = count10 + ' 盞';
+  document.getElementById('lt-count15').textContent = count15 + ' 盞';
+  document.getElementById('lt-per-unit').textContent = perUnitW + ' W/盞 (' + singleLumen + ' lm)';
+}
+
+// ============================================================
+// 5. 油漆
+// ============================================================
+const ptCoverage = { latex: 6.7, cement: 6.4, oil: 7.1 };
+
+function ptCalc() {
+  const ping = parseFloat(document.getElementById('pt-ping').value);
+  const type = document.getElementById('pt-type').value;
+  const coats = parseInt(document.getElementById('pt-coats').value);
+  const perGal = ptCoverage[type];
+  const perGalOneCoat = perGal * 2 / coats;
+
+  document.getElementById('pt-area').textContent = (ping || 0) + ' 坪';
+
+  if (!ping || ping <= 0) {
+    document.getElementById('pt-cover').textContent = '—';
+    document.getElementById('pt-gallons').textContent = '0';
+    document.getElementById('pt-buckets').textContent = '—';
+    return;
+  }
+
+  const needed = ping / perGalOneCoat;
+  const gallons = Math.ceil(needed);
+  const bigBuckets = Math.floor(gallons / 5);
+  const rem = gallons % 5;
+  let bucketStr = '';
+  if (bigBuckets > 0) bucketStr += bigBuckets + ' 桶 (5加侖)';
+  if (rem > 0) {
+    if (bucketStr) bucketStr += ' + ';
+    bucketStr += rem + ' 桶 (1加侖)';
+  }
+  if (!bucketStr) bucketStr = '—';
+
+  document.getElementById('pt-cover').textContent = perGalOneCoat.toFixed(1) + ' 坪/加侖 (' + coats + '道)';
+  document.getElementById('pt-gallons').textContent = gallons;
+  document.getElementById('pt-buckets').textContent = bucketStr;
+}
+
+// ====== Init ======
+window.onload = function() { fwInit(); clCalc(); };
+</script>
 </body>
 </html>
